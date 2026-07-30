@@ -2,13 +2,11 @@
 
 『活俠傳（Legend of Mortal）』の通常会話における文字送り速度を変更する、非公式のBepInExプラグインです。
 
-本プラグインは、ゲームの開発元・販売元、翻訳MOD作者、BepInEx開発者とは無関係です。通常会話の文字送りだけを対象とし、オート待機、入力待機、演出、戦闘、`Time.timeScale`は変更しません。
+本プラグインは、ゲームの開発元・販売元、翻訳MOD作者、BepInEx開発者とは無関係です。通常会話の文字送りだけを対象とし、オート待機、入力待機、演出、戦闘を変更しません（もし、影響があればこっそり教えてください）
 
 ## 必要環境
 
-- Windows
 - Steam版『活俠傳』
-- Unity Mono版に対応するBepInEx 6
 - 対応確認済みゲームバージョン: `release_1.0.5000.13`
 - 対応確認済みUnityバージョン: `2020.3.49f1`
 - 対応確認済みBepInExバージョン: `6.0.0-be.692`
@@ -17,8 +15,8 @@
 
 ## インストール
 
-1. ゲームを完全に終了します。
-2. Unity Mono版に対応するBepInEx 6を導入します。
+1. ゲームを終了しておいてください
+2. Unity Mono版に対応するBepInEx 6を導入します。これは別項目で詳しく案内します。
 3. ZIPを展開し、`LOM_MessageSpeed.dll`を次の場所へ配置します。フォルダーがなければ作成してください。
 
 ```text
@@ -64,6 +62,36 @@ SpeedMultiplier = 1.5
 
 設定ファイル`BepInEx/config/lom-messagespeed.cfg`が残っていてもゲームには影響しません。不要であればユーザー自身で削除できます。ゲーム本体ファイルやセーブデータを復元する必要はありません。
 
+## BepInEx 6 の導入と必要性について
+
+**LOM_MessageSpeedを使用するには、事前にBepInEx 6（Unity Mono版）の導入が必要です。**
+
+LOM_MessageSpeed単体ではメッセージ表示速度を変更できません。BepInExがゲーム起動時にプラグインを読み込み、設定ファイルの生成とHarmonyパッチの適用を行います。
+
+- 必要な種類: **BepInEx 6 Unity Mono版**
+- 対応確認済みバージョン: **6.0.0-be.692**
+- BepInEx 5: 未対応
+- Unity IL2CPP版: 対象外
+
+BepInExは、必ず公式サイトから入手してください。
+
+- [BepInEx 6 Unity Mono公式導入手順](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
+- [BepInEx 6公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
+
+公式ビルド一覧では、Windows向けの`Unity.Mono`パッケージを選択してください。`Unity.IL2CPP`や`.NET Framework`と書かれたパッケージは、このゲーム向けのBepInExパッケージではありません。
+
+BepInExの基本的な導入手順:
+
+1. Steamライブラリで『活俠傳』を右クリックし、ゲームのインストールフォルダを開きます。
+2. BepInEx 6 Unity Mono版のZIPを展開します。
+3. ZIPの内容を、`Mortal.exe`があるゲームルートへ配置します。
+4. 一度ゲームを起動してから終了します。
+5. ゲームルートに`BepInEx/config/`、`BepInEx/plugins/`、`BepInEx/LogOutput.log`が生成されていることを確認します。
+6. その後、LOM_MessageSpeedを次の場所へ配置します。
+
+```text
+<GameRoot>/BepInEx/plugins/LOM_MessageSpeed/LOM_MessageSpeed.dll
+
 ## 互換性と既知の制限
 
 - LOM JP Font Patch、LOM JP Ruby Prototype、LOM JP String Vault、XUnity Auto Translatorとは、確認した範囲内で共存します。
@@ -77,7 +105,8 @@ SpeedMultiplier = 1.5
 
 ## 問題報告
 
-[GitHub Issues](https://github.com/d-fukagawa/LOM_MessageSpeed/issues)を第一窓口とします。SNSのDM窓口は後日追記予定であり、現時点では指定していません。
+[GitHub Issues](https://github.com/d-fukagawa/LOM_MessageSpeed/issues) からお願いします。
+SNSのDM窓口は後日追記予定です。
 
 問題を報告する前に本プラグインを外し、同じ問題が再現するか確認してください。報告には、可能な範囲で次の情報を含めてください。
 
@@ -91,7 +120,7 @@ SpeedMultiplier = 1.5
 - 期待した結果と実際の結果
 - `BepInEx/LogOutput.log`
 
-ログは、ユーザー名、ローカルパス、その他の個人情報が含まれていないか確認してから投稿してください。セーブデータ、ゲームDLL、ゲーム素材は公開Issueへ添付しないでください。将来SNSのDMで受けた再現可能な問題は、個人情報を除いてIssueへ整理することを推奨します。
+ログは、ユーザー名、ローカルパス、その他の個人情報が含まれていないか確認してから投稿してください。セーブデータ、ゲームDLL、ゲーム素材は公開Issueへ添付しないでください。
 
 ## 免責事項
 
