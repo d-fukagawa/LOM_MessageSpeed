@@ -1,0 +1,136 @@
+name: 設定エディタのバグ報告
+description: LOM_MessageSpeed ConfigEditorで再現する問題を報告します
+title: "[ConfigEditor Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。ゲームを完全に終了してから再現性を確認してください。
+        投稿前にユーザー名、ローカルパス、その他の個人情報を必ず除いてください。個人用cfg全体、セーブデータ、ゲームDLL、ゲーム素材、翻訳データは公開Issueへ添付しないでください。
+
+  - type: input
+    id: editor_version
+    attributes:
+      label: 設定エディタのバージョン
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windowsバージョン
+      placeholder: Windows 11 24H2
+    validations:
+      required: true
+
+  - type: input
+    id: dotnet_runtime
+    attributes:
+      label: .NET Desktop Runtime情報
+      description: 「dotnet --list-runtimes」のMicrosoft.WindowsDesktop.App行など、.NET 10 Desktop Runtimeのバージョンを記載してください。
+      placeholder: Microsoft.WindowsDesktop.App 10.0.x [インストール先は記載不要]
+    validations:
+      required: true
+
+  - type: input
+    id: game_version
+    attributes:
+      label: ゲームバージョン
+      placeholder: release_1.0.5000.13
+    validations:
+      required: true
+
+  - type: input
+    id: bepinex_version
+    attributes:
+      label: BepInExバージョン
+      placeholder: 6.0.0-be.692
+    validations:
+      required: true
+
+  - type: dropdown
+    id: detection_method
+    attributes:
+      label: ゲームルートの検出方法
+      options:
+        - 自動検出
+        - 手動選択
+        - 検出・選択できない
+    validations:
+      required: true
+
+  - type: textarea
+    id: cfg_state
+    attributes:
+      label: cfgの状態と関連部分
+      description: cfgの存在有無と、問題に関係する2キー付近だけを記載してください。ユーザー名や完全なローカルパスを除き、cfg全体は添付しないでください。
+      placeholder: |
+        cfg: あり
+        [General] Enabled = true
+        [Message] SpeedMultiplier = 1.5
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 再現手順
+      placeholder: |
+        1. ゲームを完全に終了する
+        2. 設定エディタを起動する
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の結果
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction_rate
+    attributes:
+      label: 再現率
+      placeholder: 5回中5回
+    validations:
+      required: true
+
+  - type: textarea
+    id: process_status
+    attributes:
+      label: ゲーム起動中判定の表示内容
+      description: 設定エディタの「ゲーム状態」と「結果」に表示された内容を記載してください。ローカルパスは除いてください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: security_software
+    attributes:
+      label: セキュリティソフト等
+      description: 関係する可能性がある場合のみ、製品名、警告内容、Controlled Folder Access等の状態を記載してください。ない場合は「なし」と記載してください。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: 公開前の確認
+      options:
+        - label: ユーザー名、完全なローカルパス、その他の個人情報を除きました。
+          required: true
+        - label: 個人用cfg全体、セーブデータ、ゲームDLL、ゲーム素材、翻訳データを添付していません。
+          required: true
+        - label: ゲームを完全に終了してから再現性を確認しました。
+          required: true

@@ -13,6 +13,18 @@
 
 ゲームやBepInExの更新後は、内部仕様の変更により動作しなくなる可能性があります。
 
+## 配布ZIPのダウンロード
+
+現在の配布ファイルは、このGitHubリポジトリの`release/`フォルダからダウンロードできます。
+
+- [コアMOD `LOM_MessageSpeed-v0.1.0.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-v0.1.0.zip)
+- [設定エディタ `LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip)
+- [配布ファイル一覧をGitHubで開く](https://github.com/d-fukagawa/LOM_MessageSpeed/tree/main/release)
+
+通常会話の速度を変更するには、最初の「コアMOD」が必要です。「設定エディタ」は設定変更を補助する任意ツールであり、コアMOD本体を含みません。設定エディタを使う場合も、2つのZIPを別々にダウンロードしてください。
+
+リンクをクリックしても保存が始まらない場合は、配布ファイル一覧から目的のZIPを開き、GitHub画面右上のダウンロードボタンを選択してください。ブラウザがZIPや未署名EXEについて警告した場合は、ファイル名と配布元を確認し、必要に応じて後述のSHA-256確認手順を利用してください。
+
 ## インストール
 
 1. ゲームを終了しておいてください
@@ -54,6 +66,39 @@ SpeedMultiplier = 1.5
 - 実機確認済み範囲: `0.2`～`10.0`
 
 `0.1`は設定可能ですが、問題なく動作することを確認済みとはしていません。設定変更はゲームを完全に終了してから行い、次回起動時に反映してください。
+
+### 設定エディタ（任意）
+
+`LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip`は、`Enabled`と`SpeedMultiplier`をWindows上で変更するための任意の補助ツールです。コアMODの動作には不要であり、上記のテキストエディタによる設定方法も引き続き正式に対応します。ゲームを完全に終了してから使用してください。
+
+必要環境はWindows 10/11と[.NET 10 Desktop Runtime（Windows x64）](https://dotnet.microsoft.com/download/dotnet/10.0)です。現在のビルド環境に.NET Framework 4.8 Developer Packと.NET 8参照パックがないため、追加SDKを導入せず正式ビルドできる最小の方式として、.NET 10 WinFormsのframework-dependent配布を採用しています。ZIP内の次の4ファイルを同じフォルダへ展開し、`LOM_MessageSpeed.ConfigEditor.exe`を実行してください。
+
+```text
+LOM_MessageSpeed.ConfigEditor.exe
+LOM_MessageSpeed.ConfigEditor.dll
+LOM_MessageSpeed.ConfigEditor.deps.json
+LOM_MessageSpeed.ConfigEditor.runtimeconfig.json
+```
+
+設定エディタは次の安全条件で動作します。
+
+- 編集対象は選択したゲームルート内の`BepInEx/config/lom-messagespeed.cfg`だけです。
+- 管理者権限、ネットワーク通信、テレメトリ、自動更新、常駐処理を使用しません。
+- ゲームプロセスの注入、終了、メモリ操作、IPCは行いません。対象ゲームの起動中または起動状態を安全に確認できない場合は保存しません。
+- 未知の設定、コメント、順序、改行、UTF-8 BOMを保持し、対象2キーだけを書き換えます。
+- 保存時は外部変更を確認し、同じフォルダの一時ファイルから置換して、直前のcfgを`lom-messagespeed.cfg.bak`へ1世代バックアップします。
+- cfgがない場合は、一度ゲームを起動して生成させるか、確認画面から最小設定を新規作成できます。
+
+本ツールはコード署名されていません。Windows SmartScreenやセキュリティソフトが警告する可能性があります。配布元に掲示されたSHA-256と手元のファイルを、PowerShellで次のように比較してください。
+
+```powershell
+Get-FileHash -Algorithm SHA256 .\LOM_MessageSpeed.ConfigEditor.exe
+Get-FileHash -Algorithm SHA256 .\LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip
+```
+
+設定エディタを削除するにはゲームを終了し、展開した上記4ファイルを削除します。EXEだけを削除した時点でも設定エディタは起動できなくなり、残る3ファイルはゲームやコアMODへ作用しません。cfgとコアMODはそのまま利用できます。
+
+設定エディタ固有の問題は[GitHub Issuesの設定エディタ用フォーム](https://github.com/d-fukagawa/LOM_MessageSpeed/issues/new?template=config_editor_bug_report.yml)から報告してください。
 
 ## アンインストール
 
