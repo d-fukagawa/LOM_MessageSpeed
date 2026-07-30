@@ -1,0 +1,17 @@
+# Build outputs
+src/bin/
+src/obj/
+
+# IDE and user-specific files
+.vs/
+*.suo
+*.user
+
+# Local game and BepInEx files
+BepInEx/
+*.cfg
+*.log
+
+# Operating-system metadata
+.DS_Store
+Thumbs.db

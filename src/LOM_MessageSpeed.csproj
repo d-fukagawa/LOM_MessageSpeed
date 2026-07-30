@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>LOM_MessageSpeed</AssemblyName>
+    <RootNamespace>LOM.MessageSpeed</RootNamespace>
+    <GameRoot Condition="'$(GameRoot)' == ''">E:\SteamLibrary\steamapps\common\LegendOfMortal</GameRoot>
+    <ManagedPath>$(GameRoot)\Mortal_Data\Managed</ManagedPath>
+    <BepInExCorePath>$(GameRoot)\BepInEx\core</BepInExCorePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="0Harmony" HintPath="$(BepInExCorePath)\0Harmony.dll" Private="false" />
+    <Reference Include="BepInEx.Core" HintPath="$(BepInExCorePath)\BepInEx.Core.dll" Private="false" />
+    <Reference Include="BepInEx.Unity.Mono" HintPath="$(BepInExCorePath)\BepInEx.Unity.Mono.dll" Private="false" />
+    <Reference Include="Fungus" HintPath="$(ManagedPath)\Fungus.dll" Private="false" />
+    <Reference Include="Mortal.Story" HintPath="$(ManagedPath)\Mortal.Story.dll" Private="false" />
+    <Reference Include="UnityEngine" HintPath="$(ManagedPath)\UnityEngine.dll" Private="false" />
+    <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedPath)\UnityEngine.CoreModule.dll" Private="false" />
+    <Reference Include="UnityEngine.AudioModule" HintPath="$(ManagedPath)\UnityEngine.AudioModule.dll" Private="false" />
+  </ItemGroup>
+</Project>
