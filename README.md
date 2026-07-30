@@ -91,6 +91,11 @@ BepInExの基本的な導入手順:
 
 ```text
 <GameRoot>/BepInEx/plugins/LOM_MessageSpeed/LOM_MessageSpeed.dll
+```
+
+
+公式ガイドでは、Unity Mono用パッケージを選び、ゲーム実行ファイルのあるルートへ展開して初回起動する流れが案内されています。[BepInEx公式Unity Mono導入ガイド](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
+なお、最新のBepInEx 6ビルドは`be.692`より新しくなっています。READMEでは「`be.692`で確認済み」「それ以外は未確認」とするのが安全です。[BepInEx公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
 
 ## 互換性と既知の制限
 
