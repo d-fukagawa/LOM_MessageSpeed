@@ -1,0 +1,115 @@
+name: バグ報告
+description: LOM_MessageSpeedで再現する問題を報告します
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        報告ありがとうございます。先にゲームを完全に終了し、LOM_MessageSpeedを外した状態でも問題が再現するか確認してください。
+        ログを投稿する前に、ユーザー名、ローカルパス、その他の個人情報が含まれていないか確認してください。セーブデータ、ゲームDLL、ゲーム素材は添付しないでください。
+
+  - type: input
+    id: game_version
+    attributes:
+      label: ゲームバージョン
+      placeholder: release_1.0.5000.13
+    validations:
+      required: true
+
+  - type: input
+    id: bepinex_version
+    attributes:
+      label: BepInExバージョン
+      placeholder: 6.0.0-be.692
+    validations:
+      required: true
+
+  - type: input
+    id: plugin_version
+    attributes:
+      label: LOM_MessageSpeedバージョン
+      placeholder: 0.1.0
+    validations:
+      required: true
+
+  - type: input
+    id: settings
+    attributes:
+      label: 設定値
+      description: EnabledとSpeedMultiplierを記載してください。
+      placeholder: Enabled=true, SpeedMultiplier=1.5
+    validations:
+      required: true
+
+  - type: textarea
+    id: other_mods
+    attributes:
+      label: 併用MOD
+      description: 併用しているMOD名と各バージョンを記載してください。ない場合は「なし」と記載してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 再現手順
+      description: ゲーム起動から問題発生までを順番に記載してください。
+      placeholder: |
+        1. ゲームを起動する
+        2. ...
+        3. 問題が発生する
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction_rate
+    attributes:
+      label: 再現率
+      placeholder: 5回中5回
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: 発生箇所
+      description: scene、会話種別、該当文章の特徴を記載してください。ゲーム素材そのものは添付しないでください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待した結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の結果
+    validations:
+      required: true
+
+  - type: textarea
+    id: log
+    attributes:
+      label: BepInExログ
+      description: 個人情報を除いたBepInEx/LogOutput.logを添付するか、関連部分を貼り付けてください。
+      render: shell
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: 確認事項
+      options:
+        - label: LOM_MessageSpeedを外した状態で再現性を確認しました。
+          required: true
+        - label: ログからユーザー名、ローカルパス、その他の個人情報を除きました。
+          required: true
+        - label: セーブデータ、ゲームDLL、ゲーム素材を添付していません。
+          required: true
