@@ -2,51 +2,115 @@
 
 『活俠傳（Legend of Mortal）』の通常会話における文字送り速度を変更する、非公式のBepInExプラグインです。
 
-本プラグインは、ゲームの開発元・販売元、翻訳MOD作者、BepInEx開発者とは無関係です。通常会話の文字送りだけを対象とし、オート待機、入力待機、演出、戦闘を変更しません（もし、影響があればこっそり教えてください）
+ConfigTool `0.3.0`では、文字送り専用Plugin `LOM_MessageSpeed 0.2.0`の導入・更新、設定変更、ゲーム起動を一つの画面から行えます。Plugin DLLはConfigToolへ内蔵されているため、通常利用ではPlugin ZIPを別にダウンロードする必要はありません。
+
+本プロジェクトは、ゲームの開発元・販売元、翻訳MOD作者、BepInEx開発者とは無関係です。変更対象は通常会話の文字送りです。オート待機、入力待機、演出、戦闘を意図的には変更しません。
 
 ## 必要環境
 
+- Windows x64
 - Steam版『活俠傳』
+- BepInEx 6 Unity Mono版
 - 対応確認済みゲームバージョン: `release_1.0.5000.13`
 - 対応確認済みUnityバージョン: `2020.3.49f1`
 - 対応確認済みBepInExバージョン: `6.0.0-be.692`
 
+ConfigToolはself-contained単一EXEです。.NET Runtimeを別途インストールする必要はありません。
+
 ゲームやBepInExの更新後は、内部仕様の変更により動作しなくなる可能性があります。
 
-## 配布ZIPのダウンロード
+## ダウンロード
 
-現在の配布ファイルは、このGitHubリポジトリの`release/`フォルダからダウンロードできます。
-
-文字送り専用`0.2.0`はPhase 11で承認され、設定ツール`0.3.0`配布候補へオフライン内蔵されています。立ち絵Motion / Transition実験機能は含みません。一般配布はclean Windowsを含む最終確認後に行います。
-
-- [コアMOD `LOM_MessageSpeed-v0.1.0.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-v0.1.0.zip)
-- [設定エディタ `LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip)
-- [配布ファイル一覧をGitHubで開く](https://github.com/d-fukagawa/LOM_MessageSpeed/tree/main/release)
-
-通常会話の速度を変更するには、最初の「コアMOD」が必要です。「設定エディタ」は設定変更を補助する任意ツールであり、コアMOD本体を含みません。設定エディタを使う場合も、2つのZIPを別々にダウンロードしてください。
-
-リンクをクリックしても保存が始まらない場合は、配布ファイル一覧から目的のZIPを開き、GitHub画面右上のダウンロードボタンを選択してください。ブラウザがZIPや未署名EXEについて警告した場合は、ファイル名と配布元を確認し、必要に応じて後述のSHA-256確認手順を利用してください。
-
-## インストール
-
-1. ゲームを終了しておいてください
-2. Unity Mono版に対応するBepInEx 6を導入します。これは別項目で詳しく案内します。
-3. ZIPを展開し、`LOM_MessageSpeed.dll`を次の場所へ配置します。フォルダーがなければ作成してください。
+通常利用でダウンロードするものは、次のConfigTool ZIP一つです。
 
 ```text
-<GameRoot>/BepInEx/plugins/LOM_MessageSpeed/LOM_MessageSpeed.dll
+LOM_MessageSpeed-ConfigTool-v0.3.0-win-x64.zip
+├─ LOM_MessageSpeed.ConfigEditor.exe
+├─ README.md
+└─ LICENSE
 ```
 
-4. ゲームを起動します。
+Plugin DLLは`LOM_MessageSpeed.ConfigEditor.exe`へ内蔵されています。旧版のように、コアMOD ZIPと設定エディタZIPを別々にダウンロード・展開する必要はありません。
 
-ZIPに含まれるDLL以外を、ゲームの`Managed`ディレクトリへ入れないでください。ゲーム本体のDLLをコピー、改変、置換する必要はありません。
-
-## 設定
-
-初回起動後、次の設定ファイルが生成されます。
+> [!IMPORTANT]
+> ConfigTool `0.3.0`は正式Release前です。Phase 13で次の差し込み欄を、公開済みRelease URLと最終ファイル情報へ置き換えます。存在しない仮URLは掲載していません。
 
 ```text
-<GameRoot>/BepInEx/config/lom-messagespeed.cfg
+Release URL: {{RELEASE_URL}}
+ConfigTool file: {{CONFIG_TOOL_FILE_NAME}}
+ConfigTool ZIP SHA-256: {{CONFIG_TOOL_ZIP_SHA256}}
+ConfigEditor EXE SHA-256: {{CONFIG_EDITOR_EXE_SHA256}}
+```
+
+ConfigToolはコード署名されていません。Windows SmartScreenやセキュリティソフトが警告する場合があります。続行を判断する前に、ファイル名、配布元、後述のSHA-256を確認してください。警告機能そのものを無効にする必要はありません。
+
+## 初回導入
+
+1. ゲームを完全に終了します。Steamでも「停止中」になったことを確認します。
+2. ConfigTool ZIPを任意のフォルダへ展開し、`LOM_MessageSpeed.ConfigEditor.exe`を起動します。
+3. 「ツール設定」で自動検出されたゲームフォルダを確認します。見つからない場合だけ、ドライブまたは`Mortal.exe`があるフォルダを手動指定します。
+4. 「BepInEx導入サポート」を開きます。
+5. BepInExがない場合は「導入・入れ直し手順を開く」を押し、案内に従ってBepInEx 6 `Unity.Mono-win-x64`を手動導入します。
+6. ゲームを一度起動してタイトル画面まで進み、終了後に「状態を再確認」を押します。
+7. 「プラグインの操作へ進む」から「プラグインをインストール」を押します。
+8. 確認画面のゲームルート、導入先、導入version、SHA-256を確認して承認します。
+9. 「コンフィグ編集」で`Enabled`と`SpeedMultiplier`を保存します。
+10. 「ゲームを起動」を押します。
+
+Pluginの導入先は次の固定パスです。
+
+```text
+<GameRoot>\BepInEx\plugins\LOM_MessageSpeed\LOM_MessageSpeed.dll
+```
+
+ゲームの`Mortal_Data\Managed`には配置しません。ゲーム本体のDLLをコピー、改変、置換する必要もありません。
+
+## BepInExの準備
+
+LOM_MessageSpeedをゲーム起動時に読み込むため、Plugin利用前にBepInExが必要です。BepInEx本体はConfigToolへ含まれず、ConfigToolによる自動ダウンロード、展開、更新、修復、削除も行いません。
+
+動作確認済みの構成:
+
+```text
+BepInEx 6.0.0-be.692
+Unity Mono / Windows x64
+```
+
+- [BepInEx 6 Unity Mono公式導入手順](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
+- [BepInEx 6公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
+- [LOM_MessageSpeed向け BepInEx導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)
+
+公式ビルド一覧では、名前に`Unity.Mono-win-x64`と書かれたZIPを選びます。`Unity.IL2CPP`、`win-x86`、`NET.Framework`と書かれたものは使用しません。
+
+BepInEx 6のbuild番号が`be.692`と異なるだけではPlugin操作を禁止しません。LOM_MessageSpeedが正常に動作する場合は、そのまま利用できます。正常に動作しない場合は、現在のPluginとcfgを失わないよう、上記の入れ直し手順に沿ってゲームフォルダ外へバックアップしてから作業してください。
+
+動作確認済み`be.692`を示す実行コードが確認済みSHA-256と一致しない場合は、完全性を確認できないためPlugin操作を停止します。SHA-256不一致だけで、原因やマルウェア感染を断定することはできません。
+
+## 既存0.1.0からの更新
+
+確認済み正式版`0.1.0`は、ConfigToolから`0.2.0`へ更新できます。
+
+1. ゲームを完全に終了します。
+2. 新しいConfigToolを起動し、ゲームフォルダを確認します。
+3. プラグイン欄が更新可能な確認済み旧版を示していることを確認します。
+4. 「プラグインを更新」を押し、表示された現在版、導入版、SHA-256を確認します。
+5. 更新後に`0.2.0（確認済み）`と表示されることを確認します。
+
+更新時は、直前のDLLを`LOM_MessageSpeed.dll.bak`へ1世代保存します。既存の`lom-messagespeed.cfg`は削除・初期化せず、次の内容を保持します。
+
+- `[General] Enabled`
+- `[Message] SpeedMultiplier`
+- コメント、未知項目、順序、改行、UTF-8 BOM
+- 既存の`[Portrait]`項目
+
+立ち絵Motion / Transition機能は正式版`0.2.0`に含まれません。既存の`[Portrait]`項目は保持しますが、ConfigToolでは編集しません。
+
+## 文字送り設定
+
+設定ファイル:
+
+```text
+<GameRoot>\BepInEx\config\lom-messagespeed.cfg
 ```
 
 設定例:
@@ -67,146 +131,130 @@ SpeedMultiplier = 1.5
 - 設定可能範囲: `0.1`～`10.0`
 - 実機確認済み範囲: `0.2`～`10.0`
 
-`0.1`は設定可能ですが、問題なく動作することを確認済みとはしていません。設定変更はゲームを完全に終了してから行い、次回起動時に反映してください。
+`0.1`は設定可能ですが、問題なく動作することを確認済みとはしていません。
 
-### 設定エディタ（任意）
+ConfigToolは対象の2キーだけを書き換え、未知の設定やコメントを保持します。cfgがない場合は、確認画面から内蔵された最小テンプレートを新規作成できます。保存時は直前のcfgを`lom-messagespeed.cfg.bak`へ1世代バックアップします。
 
-`LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip`は、`Enabled`と`SpeedMultiplier`をWindows上で変更するための任意の補助ツールです。コアMODの動作には不要であり、上記のテキストエディタによる設定方法も引き続き正式に対応します。ゲームを完全に終了してから使用してください。
+## ゲーム起動
 
-必要環境はWindows 10/11と[.NET 10 Desktop Runtime（Windows x64）](https://dotnet.microsoft.com/download/dotnet/10.0)です。現在のビルド環境に.NET Framework 4.8 Developer Packと.NET 8参照パックがないため、追加SDKを導入せず正式ビルドできる最小の方式として、.NET 10 WinFormsのframework-dependent配布を採用しています。ZIP内の次の4ファイルを同じフォルダへ展開し、`LOM_MessageSpeed.ConfigEditor.exe`を実行してください。
+「ゲームを起動」は、検証済みゲームルートの`Mortal.exe`だけを起動します。
+
+- ゲーム起動中または起動状態を安全に確認できない場合、Plugin導入と設定保存を行いません。
+- 未保存の設定変更がある場合、先に保存するまでゲームを起動しません。
+- 設定が反映されない場合は、ゲームを完全に終了してから再度保存してください。
+
+## 安全仕様
+
+ConfigToolは次の方針で動作します。
+
+- 管理者権限への自動昇格、ネットワーク取得、テレメトリ、自動更新、常駐処理を使用しない
+- ゲームプロセスへの注入、終了、メモリ操作、IPCを行わない
+- cfg、ゲーム本体、BepInEx本体、他のMODを自動削除・更新しない
+- Plugin DLLのversion、SHA-256、サイズ、PE metadataを確認してから操作する
+- ゲームルート内の固定された`BepInEx\plugins`配下だけへ書き込む
+- junction、symbolic link、その他のreparse pointを含む導入経路へ書き込まない
+- 導入直前と導入後に再検査し、失敗時は元のDLLへのrollbackを試みる
+
+確認済みではないPlugin DLLが存在する場合、安全のため自動では上書きしません。
+
+| 表示・状態 | 対応 |
+|---|---|
+| 確認済みではない同版／未知版 | 使用中DLLの入手元を確認し、必要ならゲーム外へバックアップして手動整理する |
+| 導入対象より新しい版 | 自動で古い版へ戻さない。現在版を継続利用する |
+| target配置とflat配置の重複 | 表示された2つのパスを確認し、バックアップ後に利用者自身で整理する |
+| 破損または読取不能 | ゲームを終了し、権限、ファイルlock、ファイル状態を確認する |
+| ゲーム起動中または状態不明 | ゲームを完全に終了して再試行する |
+| reparse pointを含む導入経路 | リンク先へは書き込まない。通常のゲームフォルダを指定する |
+
+## ConfigToolを使わない手動導入
+
+Phase 13で単体Plugin ZIPを正式配布する場合だけ、ここへ正式なファイル名、URL、SHA-256を追加します。
+
+単体Plugin ZIPを配布しない場合は、ConfigToolからの導入が正式手順です。EXEから内蔵Pluginを取り出す方法は案内しません。
+
+手動配置を行う場合も、配置先は次の一か所です。
 
 ```text
-LOM_MessageSpeed.ConfigEditor.exe
-LOM_MessageSpeed.ConfigEditor.dll
-LOM_MessageSpeed.ConfigEditor.deps.json
-LOM_MessageSpeed.ConfigEditor.runtimeconfig.json
+<GameRoot>\BepInEx\plugins\LOM_MessageSpeed\LOM_MessageSpeed.dll
 ```
 
-設定エディタは次の安全条件で動作します。
-
-- 編集対象は選択したゲームルート内の`BepInEx/config/lom-messagespeed.cfg`だけです。
-- 管理者権限、ネットワーク通信、テレメトリ、自動更新、常駐処理を使用しません。
-- ゲームプロセスの注入、終了、メモリ操作、IPCは行いません。対象ゲームの起動中または起動状態を安全に確認できない場合は保存しません。
-- 未知の設定、コメント、順序、改行、UTF-8 BOMを保持し、対象2キーだけを書き換えます。
-- 保存時にゲーム終了後のcfg更新を検出した場合は、最新内容を読み直して画面の文字送り2項目だけを再適用します。ゲームや他ツールが追加した未知項目は保持します。
-- 保存は同じフォルダの一時ファイルから置換し、直前のcfgを`lom-messagespeed.cfg.bak`へ1世代バックアップします。
-- cfgがない場合は、確認画面からEXE内蔵テンプレートの最小設定を新規作成できます。
-
-本ツールはコード署名されていません。Windows SmartScreenやセキュリティソフトが警告する可能性があります。配布元に掲示されたSHA-256と手元のファイルを、PowerShellで次のように比較してください。
-
-```powershell
-Get-FileHash -Algorithm SHA256 .\LOM_MessageSpeed.ConfigEditor.exe
-Get-FileHash -Algorithm SHA256 .\LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip
-```
-
-設定エディタを削除するにはゲームを終了し、展開した上記4ファイルを削除します。EXEだけを削除した時点でも設定エディタは起動できなくなり、残る3ファイルはゲームやコアMODへ作用しません。cfgとコアMODはそのまま利用できます。
-
-設定エディタ固有の問題は[GitHub Issuesの設定エディタ用フォーム](https://github.com/d-fukagawa/LOM_MessageSpeed/issues/new?template=config_editor_bug_report.yml)から報告してください。
-
-### 設定ツール 0.3.0 配布候補（一般配布保留）
-
-設定ツール`0.3.0`配布候補には、ツール設定／コンフィグ編集のタブUI、ドライブまたは手動パスによるゲーム指定、文字送り設定の編集、承認済み文字送り専用プラグインの安全な導入、Windows x64 self-contained単一EXEのpublish設定を追加しています。.NET Runtimeを別途導入する必要はありません。
-
-プラグイン欄では未導入時に新規インストール、確認済み`0.1.0`だけに更新を許可します。同じ版番号でもhashが異なるDLL、新しい版、未知版、破損DLL、重複配置は自動上書きしません。導入時もcfg、BepInEx本体、ゲーム本体、他のMODを変更しません。
-
-コンフィグタブ右下の「ゲームを起動」は、検証済みゲームルートの`Mortal.exe`だけを起動します。未保存の設定がある場合やゲームが既に起動中の場合は実行しません。
-
-一度正常確認したゲームルートはツール設定へ保存され、次回起動時に自動で再確認してcfgを読み込みます。通常は毎回ボタンを押す必要はありません。ゲームを移動した場合や自動確認に失敗した場合だけ、「このフォルダを使用」で新しい場所を確定します。フォルダ参照で選んだ場合はその場で自動確認し、手入力ではEnterキーでも実行できます。
-
-ConfigEditor自体はBepInExがなくても起動でき、`Mortal.exe`を確認できればゲームフォルダを保存できます。「BepInEx導入サポート」タブでは、「このツールで動作確認したもの」「現在入っているもの」「正常動作時はそのまま使用できること」「問題時の入れ直し手順」を簡潔に表示します。
-
-BepInEx 6の別buildは「動作未確認」と案内しますが、必要なUnity Mono構成が揃っていればプラグイン操作へ進めます。動作確認済み`6.0.0-be.692`は実行コードのSHA-256も照合します。同じbe.692を示すファイルのSHA-256が公式確認値と異なる場合だけ、完全性を確認できない状態としてプラグイン操作を停止します。SHA-256不一致だけでマルウェアとは断定しません。
-
-ConfigEditorはBepInEx本体を内蔵、ダウンロード、展開、更新、修復、削除しません。外部の再導入手順を開く前にも確認を表示し、ツール自身が本文やダウンロード内容を取得・送信することはありません。
-
-正常に動作しない場合は、現在のPluginやcfgを失わないため、[作者管理のBepInEx導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)に沿ってゲームフォルダ外へバックアップしてから入れ直してください。
-
-立ち絵MotionとTransitionは実機で有効性を確認できなかったため、プラグイン正式版候補とConfigEditorの編集対象から除外しています。cfg内に既存の`[Portrait]`設定がある場合、ConfigEditorは未知設定として保持し、変更しません。`LOM_MessageSpeed-v0.2.0-test.zip`と`LOM_MessageSpeed-v0.2.0-transition-test.zip`は不採用の実験成果物です。一般配布が承認されるまでは`LOM_MessageSpeed-v0.1.0.zip`を使用してください。
-
-開発用publishコマンド:
-
-```powershell
-dotnet publish tools/LOM_MessageSpeed.ConfigEditor/LOM_MessageSpeed.ConfigEditor.csproj `
-  -c Release `
-  -p:PublishProfile=win-x64 `
-  -p:ApprovedPluginZip=artifacts/phase11-a/LOM_MessageSpeed-v0.2.0-candidate.zip `
-  -o artifacts/config-editor-win-x64
-```
-
-公式publish profileでは`ApprovedPluginZip`が必須です。入力ZIPを固定SHA-256と照合し、安全なentry名、DLLの個数、DLL SHA-256、サイズ、assembly/file/product versionを検証してから、DLLだけを`obj/`へ展開してEXEへ埋め込みます。不一致時はbuildを停止します。
+`Mortal_Data\Managed`やBepInExの`core`フォルダへは配置しません。
 
 ## アンインストール
 
 1. ゲームを完全に終了します。
-2. 配置した`LOM_MessageSpeed.dll`だけを削除します。
+2. `<GameRoot>\BepInEx\plugins\LOM_MessageSpeed\LOM_MessageSpeed.dll`だけを削除します。
+3. ConfigToolが不要なら、展開した`LOM_MessageSpeed.ConfigEditor.exe`を削除します。
 
-設定ファイル`BepInEx/config/lom-messagespeed.cfg`が残っていてもゲームには影響しません。不要であればユーザー自身で削除できます。ゲーム本体ファイルやセーブデータを復元する必要はありません。
+`BepInEx\config\lom-messagespeed.cfg`が残っていても、Pluginを外した後はゲームへ影響しません。不要な場合だけ、内容を確認して利用者自身で削除してください。BepInEx本体、ゲーム本体、セーブデータを変更する必要はありません。
 
-## BepInEx 6 の導入と必要性について
+## トラブルシューティング
 
-**LOM_MessageSpeedを使用するには、事前にBepInEx 6（Unity Mono版）の導入が必要です。**
+### BepInExが見つからない
 
-LOM_MessageSpeed単体ではメッセージ表示速度を変更できません。BepInExがゲーム起動時にプラグインを読み込み、設定ファイルの生成とHarmonyパッチの適用を行います。
+ゲームフォルダに`Mortal.exe`があることを確認し、[BepInEx導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)に沿って導入してください。導入後はゲームを一度起動・終了し、「状態を再確認」を押します。
 
-- 必要な種類: **BepInEx 6 Unity Mono版**
-- 対応確認済みバージョン: **6.0.0-be.692**
-- BepInEx 5: 未対応
-- Unity IL2CPP版: 対象外
+### 「自動導入できません」と表示される
 
-BepInExは、必ず公式サイトから入手してください。
+確認済みではないDLL、新しい版、破損・読取不能、重複配置などを検出しています。表示された状態を確認し、既存DLLを即座に削除せず、先にゲームフォルダ外へバックアップしてください。
 
-- [BepInEx 6 Unity Mono公式導入手順](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
-- [BepInEx 6公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
-- [LOM_MessageSpeed向け BepInEx 6導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)
+### ゲーム起動中または状態不明と表示される
 
-公式ビルド一覧では、名前に`Unity.Mono-win-x64`と書かれたZIPを選択してください。`Unity.IL2CPP`、`win-x86`、`.NET Framework`と書かれたパッケージは、LOM_MessageSpeedでは使用しません。
+ゲームを完全に終了し、Steamでも停止したことを確認してから再試行してください。ConfigToolからゲームプロセスを強制終了することはありません。
 
-BepInExの基本的な導入手順:
+### 設定が反映されない
 
-1. Steamライブラリで『活俠傳』を右クリックし、ゲームのインストールフォルダを開きます。
-2. BepInEx 6 Unity Mono版のZIPを展開します。
-3. ZIPの内容を、`Mortal.exe`があるゲームルートへ配置します。
-4. 一度ゲームを起動してから終了します。
-5. ゲームルートに`BepInEx/config/`、`BepInEx/plugins/`、`BepInEx/LogOutput.log`が生成されていることを確認します。
-6. その後、LOM_MessageSpeedを次の場所へ配置します。
+ゲームを完全に終了してから設定を保存し、次回起動時に確認します。`Enabled = true`であること、Pluginが`0.2.0（確認済み）`と表示されることも確認してください。
+
+### SmartScreen等の警告が表示される
+
+ConfigToolは未署名です。ファイル名、GitHubの配布元、SHA-256を確認してください。確認できないファイルは実行せず、正式Releaseから再取得してください。
+
+## SHA-256の確認
+
+Phase 13の最終build後に、Release assetから再計算した次の値を掲載します。RCやローカル検証用の値は正式版へ流用しません。
 
 ```text
-<GameRoot>/BepInEx/plugins/LOM_MessageSpeed/LOM_MessageSpeed.dll
+ConfigTool ZIP SHA-256: {{CONFIG_TOOL_ZIP_SHA256}}
+ConfigEditor EXE SHA-256: {{CONFIG_EDITOR_EXE_SHA256}}
+内蔵Plugin DLL SHA-256: {{PLUGIN_DLL_SHA256}}
 ```
 
+PowerShellでダウンロード済みファイルを確認できます。
 
-公式ガイドでは、Unity Mono用パッケージを選び、ゲーム実行ファイルのあるルートへ展開して初回起動する流れが案内されています。[BepInEx公式Unity Mono導入ガイド](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
-なお、最新のBepInEx 6ビルドは`be.692`より新しくなっています。READMEでは「`be.692`で確認済み」「それ以外は未確認」とするのが安全です。[BepInEx公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
+```powershell
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\{{CONFIG_TOOL_FILE_NAME}}'
+Get-FileHash -Algorithm SHA256 -LiteralPath '.\LOM_MessageSpeed.ConfigEditor.exe'
+```
+
+表示された値が、正式Releaseに掲載された値と一致することを確認してください。
 
 ## 互換性と既知の制限
 
 - LOM JP Font Patch、LOM JP Ruby Prototype、LOM JP String Vault、XUnity Auto Translatorとは、確認した範囲内で共存します。
 - LOM_ReadSkipおよびLOM_DetailedDisplayは設計上の競合評価を行っていますが、今回の実機環境では未確認です。
 - `Fungus.Writer.writingSpeed`を変更する別のMODとは競合する可能性があります。
-- `character`以外のすべての会話種別、すべての対象外UI、すべてのspeedタグ、VO、wait、スキップ経路を網羅確認したものではありません。
+- `character`以外のすべての会話種別、対象外UI、speedタグ、VO、wait、スキップ経路を網羅確認したものではありません。
 - speedタグ区間ではゲーム側が指定した速度を優先し、speed-reset後に通常倍率へ戻る設計です。
 - 句読点待機、明示wait、VO待機、入力待機、オート待機は倍率の対象外です。
 - ルビ表示、クリックによる即時表示、次行入力、句読点待機は、確認した範囲内で正常に動作しました。
-- `SpeedMultiplier = 0.1`で一度だけロード演出から進まない事象がありました。プラグインの例外や警告は確認されず、再現試験は実施していないため、原因は特定していません。
+- `SpeedMultiplier = 0.1`で一度だけロード演出から進まない事象がありました。プラグインの例外や警告は確認されず、再現試験は未実施です。
 
 ## 問題報告
 
-[GitHub Issues](https://github.com/d-fukagawa/LOM_MessageSpeed/issues) からお願いします。
-SNSのDM窓口は後日追記予定です。
+- [一般的なPluginの問題を報告](https://github.com/d-fukagawa/LOM_MessageSpeed/issues/new?template=bug_report.yml)
+- [ConfigToolの問題を報告](https://github.com/d-fukagawa/LOM_MessageSpeed/issues/new?template=config_editor_bug_report.yml)
 
-問題を報告する前に本プラグインを外し、同じ問題が再現するか確認してください。報告には、可能な範囲で次の情報を含めてください。
+報告には、可能な範囲で次の情報を含めてください。
 
-- ゲームバージョン
-- BepInExバージョン
-- LOM_MessageSpeedバージョン
+- ゲーム、BepInEx、LOM_MessageSpeed、ConfigToolのversion
 - `Enabled`と`SpeedMultiplier`の値
-- 併用MOD一覧と各バージョン
-- 再現手順と再現率
-- scene、会話種別、該当文章の特徴
-- 期待した結果と実際の結果
-- `BepInEx/LogOutput.log`
+- 併用MOD一覧と各version
+- 再現手順、再現率、期待した結果、実際の結果
+- ConfigToolの「問題報告用の詳細情報」
+- `BepInEx\LogOutput.log`の関連部分
 
-ログは、ユーザー名、ローカルパス、その他の個人情報が含まれていないか確認してから投稿してください。セーブデータ、ゲームDLL、ゲーム素材は公開Issueへ添付しないでください。
+ログや詳細情報は、ユーザー名、完全なローカルパス、その他の個人情報が含まれていないか確認してから投稿してください。セーブデータ、ゲームDLL、ゲーム素材、個人用cfg全体は公開Issueへ添付しないでください。
 
 ## 免責事項
 
@@ -217,3 +265,17 @@ SNSのDM窓口は後日追記予定です。
 ## ライセンスと第三者製品
 
 本プロジェクト独自のコードおよび文書は[MIT License](LICENSE)で提供されます。ゲーム本体、BepInEx、Harmony、他のMODおよびそれらの素材・コードは本プロジェクトのライセンス対象ではなく、それぞれの権利者に帰属します。配布ZIPにはゲーム本体、BepInEx、Harmony、翻訳データ、ゲーム素材を含みません。
+
+## 開発者向けpublish
+
+正式なConfigTool publishでは、承認済みPlugin ZIPをbuild時だけ指定します。ZIPを固定SHA-256、entry名、DLL数、DLL SHA-256、サイズ、assembly/file/product versionで検証し、一致したDLLだけをEXEへ埋め込みます。
+
+```powershell
+dotnet publish tools/LOM_MessageSpeed.ConfigEditor/LOM_MessageSpeed.ConfigEditor.csproj `
+  -c Release `
+  -p:PublishProfile=win-x64 `
+  -p:ApprovedPluginZip='<承認済みPlugin ZIPのローカルパス>' `
+  -o '<出力先>'
+```
+
+公開用buildへゲームDLL、BepInEx、Harmony、個人用cfgを含めないでください。
