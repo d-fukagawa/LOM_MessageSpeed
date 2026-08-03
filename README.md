@@ -17,6 +17,8 @@
 
 現在の配布ファイルは、このGitHubリポジトリの`release/`フォルダからダウンロードできます。
 
+文字送り専用`0.2.0`はPhase 11で承認され、設定ツール`0.3.0`配布候補へオフライン内蔵されています。立ち絵Motion / Transition実験機能は含みません。一般配布はclean Windowsを含む最終確認後に行います。
+
 - [コアMOD `LOM_MessageSpeed-v0.1.0.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-v0.1.0.zip)
 - [設定エディタ `LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip`をダウンロード](https://github.com/d-fukagawa/LOM_MessageSpeed/raw/refs/heads/main/release/LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip)
 - [配布ファイル一覧をGitHubで開く](https://github.com/d-fukagawa/LOM_MessageSpeed/tree/main/release)
@@ -86,8 +88,9 @@ LOM_MessageSpeed.ConfigEditor.runtimeconfig.json
 - 管理者権限、ネットワーク通信、テレメトリ、自動更新、常駐処理を使用しません。
 - ゲームプロセスの注入、終了、メモリ操作、IPCは行いません。対象ゲームの起動中または起動状態を安全に確認できない場合は保存しません。
 - 未知の設定、コメント、順序、改行、UTF-8 BOMを保持し、対象2キーだけを書き換えます。
-- 保存時は外部変更を確認し、同じフォルダの一時ファイルから置換して、直前のcfgを`lom-messagespeed.cfg.bak`へ1世代バックアップします。
-- cfgがない場合は、一度ゲームを起動して生成させるか、確認画面から最小設定を新規作成できます。
+- 保存時にゲーム終了後のcfg更新を検出した場合は、最新内容を読み直して画面の文字送り2項目だけを再適用します。ゲームや他ツールが追加した未知項目は保持します。
+- 保存は同じフォルダの一時ファイルから置換し、直前のcfgを`lom-messagespeed.cfg.bak`へ1世代バックアップします。
+- cfgがない場合は、確認画面からEXE内蔵テンプレートの最小設定を新規作成できます。
 
 本ツールはコード署名されていません。Windows SmartScreenやセキュリティソフトが警告する可能性があります。配布元に掲示されたSHA-256と手元のファイルを、PowerShellで次のように比較してください。
 
@@ -99,6 +102,38 @@ Get-FileHash -Algorithm SHA256 .\LOM_MessageSpeed-ConfigEditor-v0.1.0-win.zip
 設定エディタを削除するにはゲームを終了し、展開した上記4ファイルを削除します。EXEだけを削除した時点でも設定エディタは起動できなくなり、残る3ファイルはゲームやコアMODへ作用しません。cfgとコアMODはそのまま利用できます。
 
 設定エディタ固有の問題は[GitHub Issuesの設定エディタ用フォーム](https://github.com/d-fukagawa/LOM_MessageSpeed/issues/new?template=config_editor_bug_report.yml)から報告してください。
+
+### 設定ツール 0.3.0 配布候補（一般配布保留）
+
+設定ツール`0.3.0`配布候補には、ツール設定／コンフィグ編集のタブUI、ドライブまたは手動パスによるゲーム指定、文字送り設定の編集、承認済み文字送り専用プラグインの安全な導入、Windows x64 self-contained単一EXEのpublish設定を追加しています。.NET Runtimeを別途導入する必要はありません。
+
+プラグイン欄では未導入時に新規インストール、確認済み`0.1.0`だけに更新を許可します。同じ版番号でもhashが異なるDLL、新しい版、未知版、破損DLL、重複配置は自動上書きしません。導入時もcfg、BepInEx本体、ゲーム本体、他のMODを変更しません。
+
+コンフィグタブ右下の「ゲームを起動」は、検証済みゲームルートの`Mortal.exe`だけを起動します。未保存の設定がある場合やゲームが既に起動中の場合は実行しません。
+
+一度正常確認したゲームルートはツール設定へ保存され、次回起動時に自動で再確認してcfgを読み込みます。通常は毎回ボタンを押す必要はありません。ゲームを移動した場合や自動確認に失敗した場合だけ、「このフォルダを使用」で新しい場所を確定します。フォルダ参照で選んだ場合はその場で自動確認し、手入力ではEnterキーでも実行できます。
+
+ConfigEditor自体はBepInExがなくても起動でき、`Mortal.exe`を確認できればゲームフォルダを保存できます。「BepInEx導入サポート」タブでは、「このツールで動作確認したもの」「現在入っているもの」「正常動作時はそのまま使用できること」「問題時の入れ直し手順」を簡潔に表示します。
+
+BepInEx 6の別buildは「動作未確認」と案内しますが、必要なUnity Mono構成が揃っていればプラグイン操作へ進めます。動作確認済み`6.0.0-be.692`は実行コードのSHA-256も照合します。同じbe.692を示すファイルのSHA-256が公式確認値と異なる場合だけ、完全性を確認できない状態としてプラグイン操作を停止します。SHA-256不一致だけでマルウェアとは断定しません。
+
+ConfigEditorはBepInEx本体を内蔵、ダウンロード、展開、更新、修復、削除しません。外部の再導入手順を開く前にも確認を表示し、ツール自身が本文やダウンロード内容を取得・送信することはありません。
+
+正常に動作しない場合は、現在のPluginやcfgを失わないため、[作者管理のBepInEx導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)に沿ってゲームフォルダ外へバックアップしてから入れ直してください。
+
+立ち絵MotionとTransitionは実機で有効性を確認できなかったため、プラグイン正式版候補とConfigEditorの編集対象から除外しています。cfg内に既存の`[Portrait]`設定がある場合、ConfigEditorは未知設定として保持し、変更しません。`LOM_MessageSpeed-v0.2.0-test.zip`と`LOM_MessageSpeed-v0.2.0-transition-test.zip`は不採用の実験成果物です。一般配布が承認されるまでは`LOM_MessageSpeed-v0.1.0.zip`を使用してください。
+
+開発用publishコマンド:
+
+```powershell
+dotnet publish tools/LOM_MessageSpeed.ConfigEditor/LOM_MessageSpeed.ConfigEditor.csproj `
+  -c Release `
+  -p:PublishProfile=win-x64 `
+  -p:ApprovedPluginZip=artifacts/phase11-a/LOM_MessageSpeed-v0.2.0-candidate.zip `
+  -o artifacts/config-editor-win-x64
+```
+
+公式publish profileでは`ApprovedPluginZip`が必須です。入力ZIPを固定SHA-256と照合し、安全なentry名、DLLの個数、DLL SHA-256、サイズ、assembly/file/product versionを検証してから、DLLだけを`obj/`へ展開してEXEへ埋め込みます。不一致時はbuildを停止します。
 
 ## アンインストール
 
@@ -122,8 +157,9 @@ BepInExは、必ず公式サイトから入手してください。
 
 - [BepInEx 6 Unity Mono公式導入手順](https://docs.bepinex.dev/master/articles/user_guide/installation/unity_mono.html?tabs=tabid-win)
 - [BepInEx 6公式ビルド一覧](https://builds.bepinex.dev/projects/bepinex_be)
+- [LOM_MessageSpeed向け BepInEx 6導入・入れ直し手順](https://gist.github.com/d-fukagawa/7557dd9f2128d2ac59fec677a31541f1)
 
-公式ビルド一覧では、Windows向けの`Unity.Mono`パッケージを選択してください。`Unity.IL2CPP`や`.NET Framework`と書かれたパッケージは、このゲーム向けのBepInExパッケージではありません。
+公式ビルド一覧では、名前に`Unity.Mono-win-x64`と書かれたZIPを選択してください。`Unity.IL2CPP`、`win-x86`、`.NET Framework`と書かれたパッケージは、LOM_MessageSpeedでは使用しません。
 
 BepInExの基本的な導入手順:
 

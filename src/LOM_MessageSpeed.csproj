@@ -6,12 +6,20 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>LOM_MessageSpeed</AssemblyName>
     <RootNamespace>LOM.MessageSpeed</RootNamespace>
+    <Version>0.2.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>0.2.0.0</FileVersion>
+    <InformationalVersion>0.2.0</InformationalVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NuGetAudit>false</NuGetAudit>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
     <GameRoot Condition="'$(GameRoot)' == ''">E:\SteamLibrary\steamapps\common\LegendOfMortal</GameRoot>
     <ManagedPath>$(GameRoot)\Mortal_Data\Managed</ManagedPath>
     <BepInExCorePath>$(GameRoot)\BepInEx\core</BepInExCorePath>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Portrait\**\*.cs" />
     <Reference Include="0Harmony" HintPath="$(BepInExCorePath)\0Harmony.dll" Private="false" />
     <Reference Include="BepInEx.Core" HintPath="$(BepInExCorePath)\BepInEx.Core.dll" Private="false" />
     <Reference Include="BepInEx.Unity.Mono" HintPath="$(BepInExCorePath)\BepInEx.Unity.Mono.dll" Private="false" />
@@ -20,5 +28,11 @@
     <Reference Include="UnityEngine" HintPath="$(ManagedPath)\UnityEngine.dll" Private="false" />
     <Reference Include="UnityEngine.CoreModule" HintPath="$(ManagedPath)\UnityEngine.CoreModule.dll" Private="false" />
     <Reference Include="UnityEngine.AudioModule" HintPath="$(ManagedPath)\UnityEngine.AudioModule.dll" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>LOM_MessageSpeed.StaticTests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

@@ -10,7 +10,13 @@ src/obj/
 # Local game and BepInEx files
 BepInEx/
 *.cfg
+!tools/LOM_MessageSpeed.ConfigEditor/Templates/lom-messagespeed.cfg
 *.log
+
+# Local build, verification, and experimental outputs
+artifacts/
+release/*-test*
+release/*transition-test*
 
 # Operating-system metadata
 .DS_Store

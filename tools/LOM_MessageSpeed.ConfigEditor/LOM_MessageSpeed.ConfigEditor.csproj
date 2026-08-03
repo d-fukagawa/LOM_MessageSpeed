@@ -1,4 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="PluginPayload.props" />
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
@@ -8,11 +9,17 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <AssemblyName>LOM_MessageSpeed.ConfigEditor</AssemblyName>
     <RootNamespace>LOM.MessageSpeed.ConfigEditor</RootNamespace>
-    <Version>0.1.0</Version>
+    <Version>0.3.0</Version>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>0.1.0.0</FileVersion>
+    <FileVersion>0.3.0.0</FileVersion>
+    <InformationalVersion>0.3.0</InformationalVersion>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <SelfContained>false</SelfContained>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>false</PublishTrimmed>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <NuGetAudit>false</NuGetAudit>
     <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
     <DebugType>none</DebugType>
@@ -22,5 +29,20 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>LOM_MessageSpeed.ConfigEditor.Tests</_Parameter1>
     </AssemblyAttribute>
+    <EmbeddedResource Include="Templates\lom-messagespeed.cfg" LogicalName="LOM.MessageSpeed.ConfigEditor.Templates.lom-messagespeed.cfg" />
   </ItemGroup>
+  <Target Name="StageApprovedPluginPayload" BeforeTargets="PrepareForBuild"
+          Condition="'$(ApprovedPluginZip)' != ''">
+    <PropertyGroup>
+      <ApprovedPluginStagedPath>$(IntermediateOutputPath)approved-payload\LOM_MessageSpeed.dll</ApprovedPluginStagedPath>
+    </PropertyGroup>
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildProjectDirectory)\..\Stage-ApprovedPluginPayload.ps1&quot; -ZipPath &quot;$(ApprovedPluginZip)&quot; -OutputPath &quot;$(ApprovedPluginStagedPath)&quot; -ExpectedZipSha256 &quot;$(ApprovedPluginZipSha256)&quot; -ExpectedDllSha256 &quot;$(ApprovedPluginSha256)&quot; -ExpectedDllLength $(ApprovedPluginLength) -ExpectedAssemblyVersion &quot;$(ApprovedPluginAssemblyVersion)&quot; -ExpectedFileVersion &quot;$(ApprovedPluginFileVersion)&quot; -ExpectedProductVersionPrefix &quot;$(ApprovedPluginProductVersionPrefix)&quot;" />
+    <ItemGroup>
+      <EmbeddedResource Include="$(ApprovedPluginStagedPath)" LogicalName="LOM.MessageSpeed.ConfigEditor.Payload.LOM_MessageSpeed.dll" />
+    </ItemGroup>
+  </Target>
+  <Target Name="RequireApprovedPluginPayloadForOfficialPublish" BeforeTargets="PrepareForBuild"
+          Condition="'$(RequireApprovedPluginPayload)' == 'true'">
+    <Error Condition="'$(ApprovedPluginZip)' == ''" Text="ApprovedPluginZip is required for the official publish profile." />
+  </Target>
 </Project>

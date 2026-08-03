@@ -10,9 +10,9 @@ namespace LOM.MessageSpeed.ConfigEditor
 {
     internal sealed class ConfigDocument
     {
-        internal const decimal MinimumMultiplier = 0.1m;
-        internal const decimal MaximumMultiplier = 10.0m;
-        internal const decimal DefaultMultiplier = 1.5m;
+        internal const decimal MinimumMultiplier = ConfigSchema.MinimumMultiplier;
+        internal const decimal MaximumMultiplier = ConfigSchema.MaximumMultiplier;
+        internal const decimal DefaultMultiplier = ConfigSchema.DefaultMessageMultiplier;
 
         private static readonly Regex AssignmentPattern = new Regex(
             @"^(?<indent>[ \t]*)(?<key>[A-Za-z0-9_.-]+)(?<before>[ \t]*)=(?<after>[ \t]*)(?<value>.*?)(?<tail>[ \t]*)$",
@@ -106,7 +106,7 @@ namespace LOM.MessageSpeed.ConfigEditor
         internal static ConfigDocument CreateMissing(string configPath)
         {
             string fullPath = Path.GetFullPath(configPath);
-            const string initial = "[General]\r\nEnabled = true\r\n\r\n[Message]\r\nSpeedMultiplier = 1.5\r\n";
+            string initial = ConfigTemplate.Load();
             ParsedValues parsed = Parse(initial);
             return new ConfigDocument(
                 fullPath,
@@ -124,10 +124,7 @@ namespace LOM.MessageSpeed.ConfigEditor
 
         internal void Save(bool enabled, decimal multiplier)
         {
-            if (multiplier < MinimumMultiplier || multiplier > MaximumMultiplier)
-            {
-                throw new ConfigException("SpeedMultiplierは0.1～10.0の範囲で指定してください。");
-            }
+            ValidateMultiplier(multiplier, "SpeedMultiplier");
 
             if (enabledLocation == null || multiplierLocation == null)
             {
@@ -142,7 +139,13 @@ namespace LOM.MessageSpeed.ConfigEditor
 
             string enabledText = enabled ? "true" : "false";
             string multiplierText = multiplier.ToString("0.0############################", CultureInfo.InvariantCulture);
-            string updated = ReplaceValues(originalText, enabledLocation, enabledText, multiplierLocation, multiplierText);
+            string updated = ReplaceValues(
+                originalText,
+                new[]
+                {
+                    new Replacement(enabledLocation, enabledText),
+                    new Replacement(multiplierLocation, multiplierText)
+                });
             WriteAtomically(updated);
         }
 
@@ -219,17 +222,7 @@ namespace LOM.MessageSpeed.ConfigEditor
                 throw new ConfigException("Enabledの値がtrueまたはfalseではありません。");
             }
 
-            decimal multiplier;
-            if (!decimal.TryParse(multipliers[0].Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out multiplier))
-            {
-                throw new ConfigException("SpeedMultiplierは小数点に '.' を使った有限の数値で指定してください。");
-            }
-
-            if (multiplier < MinimumMultiplier || multiplier > MaximumMultiplier)
-            {
-                throw new ConfigException("SpeedMultiplierが保存可能範囲0.1～10.0の外です。元ファイルは変更しません。");
-            }
-
+            decimal multiplier = ParseMultiplier(multipliers[0], "SpeedMultiplier");
             return new ParsedValues(enabled[0], multipliers[0], enabledValue, multiplier);
         }
 
@@ -323,14 +316,51 @@ namespace LOM.MessageSpeed.ConfigEditor
             }
         }
 
-        private static string ReplaceValues(string text, ValueLocation first, string firstValue, ValueLocation second, string secondValue)
+        private static decimal ParseMultiplier(ValueLocation location, string name)
         {
-            ValueLocation high = first.Start > second.Start ? first : second;
-            ValueLocation low = first.Start > second.Start ? second : first;
-            string highValue = ReferenceEquals(high, first) ? firstValue : secondValue;
-            string lowValue = ReferenceEquals(low, first) ? firstValue : secondValue;
-            string once = text.Remove(high.Start, high.Length).Insert(high.Start, highValue);
-            return once.Remove(low.Start, low.Length).Insert(low.Start, lowValue);
+            if (!decimal.TryParse(location.Value, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal value))
+            {
+                throw new ConfigException(name + "は小数点に '.' を使った有限の数値で指定してください。");
+            }
+
+            ValidateMultiplier(value, name);
+            return value;
+        }
+
+        private static void ValidateMultiplier(decimal value, string name)
+        {
+            if (value < MinimumMultiplier || value > MaximumMultiplier)
+            {
+                throw new ConfigException(name + "が保存可能範囲0.1～10.0の外です。元ファイルは変更しません。");
+            }
+        }
+
+        private static string ReplaceValues(string text, Replacement[] replacements)
+        {
+            Array.Sort(replacements, delegate (Replacement left, Replacement right)
+            {
+                return right.Location.Start.CompareTo(left.Location.Start);
+            });
+            string updated = text;
+            foreach (Replacement replacement in replacements)
+            {
+                updated = updated.Remove(replacement.Location.Start, replacement.Location.Length)
+                    .Insert(replacement.Location.Start, replacement.Value);
+            }
+
+            return updated;
+        }
+
+        private sealed class Replacement
+        {
+            internal Replacement(ValueLocation location, string value)
+            {
+                Location = location;
+                Value = value;
+            }
+
+            internal ValueLocation Location { get; }
+            internal string Value { get; }
         }
 
         private sealed class ValueLocation
@@ -349,7 +379,11 @@ namespace LOM.MessageSpeed.ConfigEditor
 
         private sealed class ParsedValues
         {
-            internal ParsedValues(ValueLocation enabledLocation, ValueLocation multiplierLocation, bool enabled, decimal multiplier)
+            internal ParsedValues(
+                ValueLocation enabledLocation,
+                ValueLocation multiplierLocation,
+                bool enabled,
+                decimal multiplier)
             {
                 EnabledLocation = enabledLocation;
                 MultiplierLocation = multiplierLocation;

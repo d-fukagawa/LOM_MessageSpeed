@@ -26,18 +26,17 @@ namespace LOM.MessageSpeed.ConfigEditor
             error = string.Empty;
             try
             {
-                root = Path.GetFullPath(selectedPath).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
-                if (!File.Exists(Path.Combine(root, "Mortal.exe")))
+                string candidate = selectedPath.Trim();
+                if (!Path.IsPathFullyQualified(candidate))
                 {
-                    error = "Mortal.exeが見つかりません。";
+                    error = "相対パスは使用できません。絶対パスを指定してください。";
                     return false;
                 }
 
-                string bepinex = Path.Combine(root, "BepInEx");
-                string config = Path.Combine(bepinex, "config");
-                if (!Directory.Exists(bepinex) || !Directory.Exists(config))
+                root = Path.GetFullPath(candidate).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+                if (!File.Exists(Path.Combine(root, "Mortal.exe")))
                 {
-                    error = "BepInExフォルダまたはBepInEx/configフォルダが見つかりません。";
+                    error = "Mortal.exeが見つかりません。";
                     return false;
                 }
 
@@ -61,6 +60,11 @@ namespace LOM.MessageSpeed.ConfigEditor
         internal static string GetConfigPath(string root)
         {
             return Path.GetFullPath(Path.Combine(root, ConfigRelativePath));
+        }
+
+        internal static string GetPluginPath(string root)
+        {
+            return Path.GetFullPath(Path.Combine(root, PluginManifest.InstallRelativePath));
         }
 
         private static void AddNearbyCandidates(HashSet<string> candidates)

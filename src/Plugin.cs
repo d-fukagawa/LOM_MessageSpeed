@@ -19,19 +19,22 @@ namespace LOM.MessageSpeed
     {
         public const string PluginGuid = "lom-messagespeed";
         public const string PluginName = "LOM_MessageSpeed";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "0.2.0";
+        // Preserve the 0.1.0 Harmony owner ID for compatibility with existing
+        // diagnostics and any external ordering rule that refers to the plugin GUID.
+        internal const string MessageHarmonyId = PluginGuid;
 
         private const BindingFlags DeclaredMembers =
             BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance |
             BindingFlags.Static | BindingFlags.DeclaredOnly;
 
         private static Plugin instance;
-        private Harmony harmony;
+        private Harmony messageHarmony;
         private Contract contract;
         private MessageSpeedConfig messageConfig;
         private StoryManager observedStoryManager;
         private int observedSceneHandle = int.MinValue;
-        private bool patchesApplied;
+        private bool messagePatchesApplied;
 
         internal static DialogueSpeedState State { get; private set; }
 
@@ -63,14 +66,20 @@ namespace LOM.MessageSpeed
             Logger.LogInfo("SpeedMultiplier: " + messageConfig.EffectiveMultiplier);
             LogVersions();
 
+            InitializeMessageCategory();
+        }
+
+        private void InitializeMessageCategory()
+        {
             List<string> missing = new List<string>();
             contract = ValidateContract(missing);
             if (missing.Count != 0)
             {
-                Logger.LogError("Patch target not found. The current game version may not be supported.");
+                Logger.LogError(
+                    "Message patch target not found. The current game version may not be supported.");
                 for (int i = 0; i < missing.Count; i++)
                 {
-                    Logger.LogError("Missing or incompatible contract: " + missing[i]);
+                    Logger.LogError("Missing or incompatible Message contract: " + missing[i]);
                 }
 
                 return;
@@ -88,8 +97,8 @@ namespace LOM.MessageSpeed
 
             try
             {
-                ApplyPatches();
-                patchesApplied = true;
+                ApplyMessagePatches();
+                messagePatchesApplied = true;
                 LogPatchTarget(contract.ProcessTokens);
                 LogPatchTarget(contract.NotifyEnd);
                 LogPatchTarget(contract.SkipDialog);
@@ -97,21 +106,21 @@ namespace LOM.MessageSpeed
             }
             catch (Exception ex)
             {
-                if (harmony != null)
+                if (messageHarmony != null)
                 {
-                    harmony.UnpatchSelf();
+                    messageHarmony.UnpatchSelf();
                 }
 
                 State.RestoreAll(true);
-                patchesApplied = false;
-                Logger.LogError("Patch target not found. The current game version may not be supported.");
-                Logger.LogError("Harmony patch application failed; all LOM_MessageSpeed patches were removed: " + ex);
+                messagePatchesApplied = false;
+                Logger.LogError(
+                    "Message Harmony patch application failed; only Message patches were removed: " + ex);
             }
         }
 
         private void Update()
         {
-            if (!patchesApplied || State == null)
+            if (!messagePatchesApplied || State == null)
             {
                 return;
             }
@@ -159,12 +168,12 @@ namespace LOM.MessageSpeed
                 State.ClearScene();
             }
 
-            if (harmony != null)
+            if (messageHarmony != null)
             {
-                harmony.UnpatchSelf();
+                messageHarmony.UnpatchSelf();
             }
 
-            patchesApplied = false;
+            messagePatchesApplied = false;
             if (ReferenceEquals(instance, this))
             {
                 instance = null;
@@ -416,19 +425,19 @@ namespace LOM.MessageSpeed
             return matches[0];
         }
 
-        private void ApplyPatches()
+        private void ApplyMessagePatches()
         {
-            harmony = new Harmony(PluginGuid);
-            harmony.Patch(
+            messageHarmony = new Harmony(MessageHarmonyId);
+            messageHarmony.Patch(
                 contract.ProcessTokens,
                 prefix: new HarmonyMethod(typeof(MessageTypingPatch), "ProcessTokensPrefix"));
-            harmony.Patch(
+            messageHarmony.Patch(
                 contract.NotifyEnd,
                 postfix: new HarmonyMethod(typeof(MessageTypingPatch), "NotifyEndPostfix"));
-            harmony.Patch(
+            messageHarmony.Patch(
                 contract.SkipDialog,
                 prefix: new HarmonyMethod(typeof(MessageTypingPatch), "SkipDialogPrefix"));
-            harmony.Patch(
+            messageHarmony.Patch(
                 contract.SayDialogOnDestroy,
                 prefix: new HarmonyMethod(typeof(MessageTypingPatch), "SayDialogOnDestroyPrefix"));
         }

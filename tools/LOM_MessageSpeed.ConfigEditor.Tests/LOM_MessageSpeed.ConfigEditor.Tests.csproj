@@ -8,6 +8,8 @@
     <AssemblyName>LOM_MessageSpeed.ConfigEditor.Tests</AssemblyName>
     <NuGetAudit>false</NuGetAudit>
     <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\LOM_MessageSpeed.ConfigEditor\LOM_MessageSpeed.ConfigEditor.csproj" />

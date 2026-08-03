@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GameRoot Condition="'$(GameRoot)' == ''">E:\SteamLibrary\steamapps\common\LegendOfMortal</GameRoot>
+    <BepInExCorePath>$(GameRoot)\BepInEx\core</BepInExCorePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Mono.Cecil" HintPath="$(BepInExCorePath)\Mono.Cecil.dll" />
+  </ItemGroup>
+</Project>

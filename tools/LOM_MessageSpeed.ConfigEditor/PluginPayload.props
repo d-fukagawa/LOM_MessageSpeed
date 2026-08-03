@@ -1,0 +1,11 @@
+<Project>
+  <PropertyGroup>
+    <ApprovedPluginVersion>0.2.0</ApprovedPluginVersion>
+    <ApprovedPluginAssemblyVersion>1.0.0.0</ApprovedPluginAssemblyVersion>
+    <ApprovedPluginFileVersion>0.2.0.0</ApprovedPluginFileVersion>
+    <ApprovedPluginProductVersionPrefix>0.2.0</ApprovedPluginProductVersionPrefix>
+    <ApprovedPluginLength>19968</ApprovedPluginLength>
+    <ApprovedPluginSha256>0D23512EB5E59C8AAEC4545D344F8D4948C99E22E163D6DB2E5AB0D6D98B40A3</ApprovedPluginSha256>
+    <ApprovedPluginZipSha256>7B4195E7AD4EB2247445F44C7E9C54DC1060ECE050287FA41C39F6E3BE20A689</ApprovedPluginZipSha256>
+  </PropertyGroup>
+</Project>
